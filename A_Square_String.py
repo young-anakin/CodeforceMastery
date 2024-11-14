@@ -1,0 +1,1 @@
+z = True if 10%2 == 0 else False

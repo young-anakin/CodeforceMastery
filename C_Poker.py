@@ -1,0 +1,6 @@
+val = set()
+val.add(12)
+ab = set()
+ab.add(1)
+val.update(ab)
+print(val)

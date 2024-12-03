@@ -1,49 +1,37 @@
-from sys import stdin
+t = int(input())
+from collections import defaultdict
+arr = list(map(int, input().split(" ")))
+memo = {}
 
-def I(): return int(stdin.readline().strip())
- 
-def II(): return map(int, stdin.readline().strip().split())
- 
-def IL(): return list(map(int, stdin.readline().strip().split()))
- 
-def SIL(): return sorted(map(int, stdin.readline().strip().split()),)
+def dp(ind, contest, gym):
+    if ind >= t:
+        return 0
 
-def S() : return stdin.readline().strip()
-
-def SL() : return list(stdin.readline().strip().split())
-
-
-def solve():
-    n = I()
-    a = IL()
-
-    memo = {}
-    def dp(index, lastTaken):
-        if (index, lastTaken) in memo:
-            return memo[(index, lastTaken)]
+    if (ind, contest, gym) not in memo:
+        if arr[ind] == 0:
+            memo[(ind, contest, gym)] = dp(ind + 1, True, True)
         
-        if index == n:
-            return 0
+        elif arr[ind] == 1:
+            if contest:
+                memo[(ind, contest, gym)] = 1 + dp(ind + 1, False, True)
+            else:
+                memo[(ind, contest, gym)] = dp(ind + 1, True, True)
 
-        if a[index] == 0:
-            memo[(index, lastTaken)] = 1 + dp(index + 1, 0)
+        elif arr[ind] == 2:
+            if gym:
+                memo[(ind, contest, gym)] = 1 + dp(ind + 1, True, False)
+            else:
+                memo[(ind, contest, gym)] = dp(ind + 1, True, True)
+
+        elif arr[ind] == 3:
+            if gym and contest:
+                memo[(ind, contest, gym)] = max(1 + dp(ind + 1, True, False), 1 + dp(ind + 1, False, True))
+            elif gym:
+                memo[(ind, contest, gym)] = 1 + dp(ind + 1, True, False)
+            elif contest:
+                memo[(ind, contest, gym)] = 1 + dp(ind + 1, False, True)
         
-        elif a[index] == 3:
-            one = int(lastTaken == 1) + dp(index + 1, 1)
-            two = int(lastTaken == 2) + dp(index + 1, 2)
-            zero = 1  + dp(index + 1, 0)
+    return memo[(ind, contest, gym)]
 
-            memo[(index, lastTaken)] = min(one, two, zero) 
-
-        else:
-            memo[(index, lastTaken)] = int(lastTaken == a[index]) + dp(index + 1, a[index])
-        
-        return memo[(index, lastTaken)]
-    
-    print(dp(0, 8))
-       
- 
- 
-T = 1
-for _ in range(T):
-    solve()
+x = dp(0, True, True)
+print(len(arr) - x)

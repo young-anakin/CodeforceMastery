@@ -1,59 +1,56 @@
-n = int(input())
-arr = []
-from collections import defaultdict, deque
-graph = defaultdict(list)
-dependencies = defaultdict(int)
-al = "abcdefghijklmnopqrstuvwxyz"
-for _ in range(n):
+t = int(input())
+alph = list()
+for ind in range(26):
+    alph.append(chr(ind + 97))
+
+# print(alph)
+
+i = 0
+ans = ""
+given = []
+for ind in range(t):
     val = input()
-    arr.append(val)
+    given.append(val[0])
+
+cp = 0
+ss = set()
+ss.add(given[0])
 fl = True
-for ind in range(0, len(arr)-1):
-    a, b = arr[ind], arr[ind+1]
-    if a[0] != b[0]:
-        graph[a[0]].append(b[0])
-        dependencies[b[0]] +=1
+for ind in range(1, len(given)):
+    if given[ind] not in ss:
+        ss.add(given[ind])
+        cp +=1 
     else:
-        for j in range(min(len(a), len(b))):
-            if a[j] != b[j]:
-                graph[a[j]].append(b[j])
-                dependencies[b[j]] +=1
-                break
-for ind in graph:
-    if len(graph[ind]) > 1:
-        fl = False
-# print(graph)
-queue = deque()
-extra = deque()
-for ind in range(len(al)):
-    if dependencies[al[ind]] == 0:
-        queue.append(al[ind])
-# print(queue)
+        if given[ind] != given[ind-1]:
+            fl = False
+            break
+
 if not fl:
     print("Impossible")
 else:
-    fin = ""
-    while queue:
-        val = queue.popleft()
-        while extra and extra[-1][0] < val[-1]:
-            new = extra.popleft()
-            fin += new
-            for j in graph[new]:
-                extra.append(j)
-        for ind in graph[val]:
-            dependencies[ind] -=1
-            if dependencies[ind] == 0:
-                extra.append(ind)
-
-        fin += val
-    while extra:
-        new = extra.popleft()
-        fin += new
-        for j in graph[new]:
-            extra.append(j)
-        # for ind in range(len(extra))
-    # print(extra)
-    if len(fin) != 26:
-        print("Impossible")
-    else:
-        print("".join(fin))
+    # for ind in range(len(alph)):
+    #     if 
+    ss2 = set()
+    choose = []
+    ans = ""
+    for ind in given:
+        if ind not in ss2:
+            choose.append(ind)
+            ss2.add(ind)
+    
+    choose = choose[::-1]
+    # ss2 = set()
+    for ind in alph:
+        if ind not in ss:
+            ans += ind
+            ss2.add(ind)
+        else:
+            if choose[-1] == ind:
+                choose = choose[::-1]
+                ans += "".join(choose)
+                break
+    
+    for ind in alph:
+        if ind not in ss2:
+            ans += ind
+    print(ans)

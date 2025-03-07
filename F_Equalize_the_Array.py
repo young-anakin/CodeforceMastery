@@ -33,5 +33,7 @@ for _ in range(t):
 
         mx = min(mx, right + left)
 
+        #hallelughaj
+
     
     print(mx)

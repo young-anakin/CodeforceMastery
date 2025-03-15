@@ -1,6 +1,7 @@
 t = int(input())
 for _ in range(t):
     n = int(input())
+    # hi man
     val = input()
     stack = []
     for i in val:
